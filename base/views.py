@@ -61,7 +61,7 @@ def registerUser(request):
 
     serializer = UserSerializerWithToken(user, many=False)
 
-    return Response(serializer)
+    return Response(serializer.data)
 
 
 
