@@ -14,6 +14,7 @@ from .serializer import ProductSerializer,UserSerializer,UserSerializerWithToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth.hashers import make_password
+from rest_framework import status
 
 from base import serializer
 
@@ -52,16 +53,21 @@ def getRoutes(request):
 def registerUser(request):
     data = request.data
 
-    user = User.objects.create(
+    try:
+
+     user = User.objects.create(
         first_name= data['name'],
         username= data['email'],
         email=data['email'],
         password = make_password(data['password'])
-    )
+     )
 
-    serializer = UserSerializerWithToken(user, many=False)
+     serializer = UserSerializerWithToken(user, many=False)
 
-    return Response(serializer.data)
+     return Response(serializer.data)
+    except:
+      message={'details': 'Your email is already exist'}
+      return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 
 
