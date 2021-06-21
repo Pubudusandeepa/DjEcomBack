@@ -19,7 +19,7 @@ from base import serializer
 
 
 @api_view(['POST'])
-@permission_classes(['IsAuthenticated'])
+@permission_classes([IsAuthenticated])
 def addOrderItems(request):
 
     user = request.user
@@ -47,7 +47,7 @@ def addOrderItems(request):
         )
         #create order items and set order to orderItem relationship
         for i in orderItems:
-            product = Product.objects.get(_id=i[product])
+            product = Product.objects.get(_id=i['product'])
 
 
             item = OrderItem.objects.create(
@@ -60,12 +60,12 @@ def addOrderItems(request):
             )
 
             #4 update stock
-            product.countInStock -= item.qty
+            product.countInStock -= int(item.qty)
             product.save()
 
 
-    serializer = OrderSerializer(order,many=True)
-    return Response(serializer.data)
+        serializer = OrderSerializer(order,many=False)
+        return Response(serializer.data)
 
 
 
