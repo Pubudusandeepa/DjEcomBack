@@ -90,6 +90,6 @@ def getUsers(request):
 @api_view(['DELETE'])    
 @permission_classes([IsAdminUser])
 def deleteUser(request, pk):
-    userDeletion = user.object.get(id=pk)
+    userDeletion = User.objects.get(id=pk)
     userDeletion.delete()
     return Response('User was Delete')
